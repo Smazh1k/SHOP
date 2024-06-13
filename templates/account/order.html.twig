@@ -1,48 +1,51 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}My order - SHOP{% endblock %}
+{% block title %}My Order - SHOP{% endblock %}
 
 {% block body %}
-    <h2>Order No. {{order.reference}}</h2>
+    <h2>Order No. {{ order.reference }}</h2>
     <hr>
     <p>
-        <b>Order placed on:</b> {{order.createdAt|date('d/m/Y')}} <br>
-        <b>Status:</b> {{
-        order.state == 1 ? 'Payment accepted' :
-        order.state == 2 ? 'In preparation' : 'Shipped'
-        }}<br>
-        <b>Reference : </b><span>{{order.reference}}</span><br>
+        <strong>Order placed on:</strong> {{ order.createdAt|date('d/m/Y') }} <br>
+        <strong>Status:</strong>
+        {% if order.state == 1 %}
+        Payment accepted
+    {% elseif order.state == 2 %}
+        In preparation
+    {% else %}
+        Shipped
+        {% endif %}<br>
+        <strong>Reference:</strong> <span>{{ order.reference }}</span><br>
     </p>
     <table class="table mt-4">
         <thead>
         <tr>
             <th scope="col">Item</th>
             <th scope="col">Quantity</th>
-            <th scope="col">Unit Price </th>
+            <th scope="col">Unit Price</th>
             <th scope="col">Total</th>
-            <th></th>
         </tr>
         </thead>
         <tbody>
         {% for product in order.orderDetails %}
             <tr>
-                <td>{{product.product}}</td>
-                <td>x{{product.quantity}}</td>
-                <td>{{(product.price / 100)|number_format(2,',','.') }} €</td>
-                <td>{{(product.total / 100)|number_format(2,',','.') }} €</td>
+                <td>{{ product.product }}</td>
+                <td>x{{ product.quantity }}</td>
+                <td>{{ (product.price / 100)|number_format(2, ',', '.') }} €</td>
+                <td>{{ (product.total / 100)|number_format(2, ',', '.') }} €</td>
             </tr>
         {% endfor %}
         <tr>
             <th>Subtotal</th>
             <td></td>
             <td></td>
-            <td>{{(order.total / 100)|number_format(2,',','.') }} €</td>
+            <td>{{ (order.total / 100)|number_format(2, ',', '.') }} €</td>
         </tr>
         </tbody>
     </table>
     <div class="text-right">
-        <b>Shipping :</b> {{(order.carrierPrice / 100)|number_format(2,',','.') }} €<br>
-        <b>Total : </b> {{((order.carrierPrice + order.total) / 100)|number_format(2,',','.') }} €
+        <strong>Shipping:</strong> {{ (order.carrierPrice / 100)|number_format(2, ',', '.') }} €<br>
+        <strong>Total:</strong> {{ ((order.carrierPrice + order.total) / 100)|number_format(2, ',', '.') }} €
     </div>
-    <a title="Back to your member area" href="{{ path('account') }}">Return to my account</a>
+    <a href="{{ path('account') }}" title="Back to your member area">Return to My Account</a>
 {% endblock %}

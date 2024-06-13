@@ -1,30 +1,32 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}My account - SHOP{% endblock %}
+{% block title %}My Account - SHOP{% endblock %}
 
 {% block body %}
-    <h2>My account</h2>
-    Welcome to your member area, {{ app.user.firstname }}.
+    <h2>My Account</h2>
+    <p>Welcome to your member area, {{ app.user.firstname }}.</p>
     <hr>
+
     {% for message in app.flashes('notice') %}
         <div class="alert alert-success">
             {{ message }}
         </div>
     {% endfor %}
+
     <div class="list-group">
         {% if is_granted('ROLE_ADMIN') %}
             <a href="{{ path('admin') }}" class="list-group-item list-group-item-action">
-                Back office
+                Back Office
             </a>
         {% endif %}
         <a href="{{ path('account_orders') }}" class="list-group-item list-group-item-action">
-            My orders
+            My Orders
         </a>
         <a href="{{ path('account_address') }}" class="list-group-item list-group-item-action">
-            Manage my addresses
+            Manage My Addresses
         </a>
         <a href="{{ path('account_password') }}" class="list-group-item list-group-item-action">
-            Change password
+            Change Password
         </a>
     </div>
 {% endblock %}

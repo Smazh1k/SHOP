@@ -1,34 +1,33 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}My addresses - SHOP{% endblock %}
+{% block title %}My Addresses - SHOP{% endblock %}
 
 {% block body %}
-    <a href="{{ path('account_address_new') }}" class="btn btn-info btn-sm float-right mt-2">Add an address</a>
-    <h2>Manage my addresses</h2>
+    <a href="{{ path('account_address_new') }}" class="btn btn-info btn-sm float-right mt-2">Add a New Address</a>
+    <h2>Manage My Addresses</h2>
 
     <div class="row mt-3">
-        {% for address in app.user.addresses %}
-            <div class="col-md-6">
-                <div class="card mb-3">
-                    <div class="card-body">
-                        <h5 class="card-title">{{ address.name }}</h5>
-                        <h6 class="card-subtitle mb-2 text-muted"></h6>
-                        <p class="card-text">
-                            {{ address.address }},<br>
-                            {{ address.postal }} -
-                            {{ address.city }}<br>
-                            {{ address.country }}
-                        </p>
-                        <a href="{{ path('account_address_update', {id: address.id}) }}" class="card-link">Edit</a>
-                        <a href="{{ path('account_address_delete', {id: address.id}) }}" class="card-link">Delete</a>
+        {% if app.user.addresses is empty %}
+            <p>You haven't added any addresses yet.</p>
+        {% else %}
+            {% for address in app.user.addresses %}
+                <div class="col-md-6">
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ address.name }}</h5>
+                            <p class="card-text">
+                                {{ address.address }}<br>
+                                {{ address.postal }} - {{ address.city }}<br>
+                                {{ address.country }}
+                            </p>
+                            <a href="{{ path('account_address_update', {id: address.id}) }}" class="card-link">Edit</a>
+                            <a href="{{ path('account_address_delete', {id: address.id}) }}" class="card-link">Delete</a>
+                        </div>
                     </div>
                 </div>
-            </div>
-        {% else %}
-            <p>
-                You haven't added any addresses yet.
-            </p>
-        {% endfor %}
+            {% endfor %}
+        {% endif %}
     </div>
-    <a title="Back to your member area" href="{{ path('account') }}">Return to my account</a>
+
+    <a href="{{ path('account') }}" title="Back to your member area">Return to My Account</a>
 {% endblock %}

@@ -1,10 +1,10 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}My orders SHOP{% endblock %}
+{% block title %}My Orders - SHOP{% endblock %}
 
 {% block body %}
-    <h2>View my orders</h2>
-    {% if orders %}
+    <h2>View My Orders</h2>
+    {% if orders is not empty %}
         <table class="table mt-4">
             <thead>
             <tr>
@@ -19,15 +19,20 @@
             <tbody>
             {% for order in orders %}
                 <tr>
-                    <td>{{order.totalQuantity}}</td>
-                    <td>{{
-                        order.state == 1 ? 'Payment accepted' :
-                        order.state == 2 ? 'In preparation' : 'Shipped'
-                        }}</td>
-                    <td>{{((order.carrierPrice + order.total) / 100)|number_format(2,',','.') }} €</td>
-                    <td>{{order.createdAt|date('d/m/Y')}}</td>
-                    <td><span class="badge badge-secondary">{{order.reference}}</span></td>
-                    <td><a href="{{ path('account_order', {'reference' : order.reference}) }}">View order</a></td>
+                    <td>{{ order.totalQuantity }}</td>
+                    <td>
+                        {% if order.state == 1 %}
+                            Payment accepted
+                        {% elseif order.state == 2 %}
+                            In preparation
+                        {% else %}
+                            Shipped
+                        {% endif %}
+                    </td>
+                    <td>{{ ((order.carrierPrice + order.total) / 100)|number_format(2, ',', '.') }} €</td>
+                    <td>{{ order.createdAt|date('d/m/Y') }}</td>
+                    <td><span class="badge badge-secondary">{{ order.reference }}</span></td>
+                    <td><a href="{{ path('account_order', {'reference': order.reference}) }}">View order</a></td>
                 </tr>
             {% endfor %}
             </tbody>
@@ -35,5 +40,5 @@
     {% else %}
         <p>You haven't placed any orders yet.</p>
     {% endif %}
-    <a title="Back to your member area" href="{{ path('account') }}">Return to my account</a>
+    <a href="{{ path('account') }}" title="Back to your member area">Return to My Account</a>
 {% endblock %}
