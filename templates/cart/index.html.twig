@@ -1,0 +1,59 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}My Cart{% endblock %}
+
+{% block body %}
+    <h3>My Cart</h3>
+    {% if totalQuantity > 0 %}
+        <a href="{{ path('remove_cart') }}" title="Remove all items" class="btn btn-outline-danger btn-sm float-right">
+            <i class="bi bi-x"></i>
+            Reset my cart
+        </a>
+    {% endif %}
+
+    <p>Here are the items you've added</p>
+
+    <table class="table mt-5">
+        <thead>
+        <tr>
+            <th scope="col">Item</th>
+            <th scope="col">Price (unit)</th>
+            <th class="text-center" scope="col">Quantity</th>
+            <th scope="col">Total</th>
+            <th scope="col"></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for item in cart %}
+            <tr>
+                <td class="align-middle">
+                    <img height="60px" src="/uploads/{{ item.product.image }}" alt="{{ item.product.name }}">
+                    {{item.product.name}}
+                </td>
+                <td class="align-middle">{{(item.product.price / 100)|number_format(2,',','.') }} €</td>
+                <td class="text-center align-middle">
+                    <a title="Remove 1 item" href="{{ path('decrease_item', {id:item.product.id}) }}"><i class="bi bi-dash"></i></a>
+                    {{ item.quantity }}
+                    <a title="Add 1 item" href="{{ path('add_to_cart', {id:item.product.id}) }}"><i class="bi bi-plus"></i></a>
+                </td>
+                <td class="align-middle">{{ (item.quantity * (item.product.price / 100))|number_format(2,',','.') }} €</td>
+                <td class="align-middle"><a title="Remove all items of this line" href="{{ path('remove_cart_item', {id: item.product.id}) }}" class="text-danger"href=""><i class="bi bi-trash"></i></a></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+        <tfoot>
+        <th>Total</th>
+        <td></td>
+        <td class="text-center">  <small>x</small> {{ totalQuantity }}</td>
+        <th>{{ (totalPrice / 100)|number_format(2,',','.') }} €</th>
+        </tfoot>
+    </table>
+    <a class="mb-3 d-block" href="{{ path('product') }}">Continue shopping</a>
+    {% if totalQuantity > 0 %}
+        <a href="{{ path('order')}}"title="Validate then proceed to payment" class="btn btn-outline-success btn-block"></i> Validate my cart</a>
+    {% else %}
+        Your cart is empty, fill it from the <a href="{{ path('product') }}">products</a> page.
+    {% endif %}
+
+
+{% endblock %}
